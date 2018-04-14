@@ -1,0 +1,62 @@
+{
+    "name": "markdown-autolinefeed",
+    "displayName": "Markdown-AutoLinefeed",
+    "description": "Add two Spaces at line tail",
+    "version": "1.0.0",
+    "publisher": "houjk",
+    "engines": {
+        "vscode": "^1.10.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "markdown"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jingkanghou/exercise/tree/master/markdown-autolinefeed"
+    },
+    "license": "MIT",
+    "activationEvents": [
+        "onCommand:extension.AutoLineFeed",
+        "onLanguage:markdown",
+        "workspaceContains:README.md"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.AutoLineFeed",
+                "title": "Auto Linefeed"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.AutoLineFeed",
+                "key": "ctrl+Alt+A",
+                "mac": "ctrl+Alt+A",
+                "when": "editorTextFocus && editorLangId == markdown"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "extension.AutoLineFeed",
+                    "group": "navigation"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "eslint": "^4.11.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
