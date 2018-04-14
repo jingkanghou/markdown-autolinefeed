@@ -1,9 +1,9 @@
 {
     "name": "markdown-autolinefeed",
     "displayName": "Markdown-AutoLinefeed",
-    "description": "Add two Spaces at line tail",
-    "version": "1.0.0",
-    "publisher": "houjk",
+    "description": "Automatically adds markdown style linefeed",
+    "version": "1.0.1",
+    "publisher": "jingkanghou",
     "engines": {
         "vscode": "^1.10.0"
     },
@@ -15,7 +15,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/jingkanghou/exercise/tree/master/markdown-autolinefeed"
+        "url": "https://github.com/jingkanghou/markdown-autolinefeed"
     },
     "license": "MIT",
     "activationEvents": [
