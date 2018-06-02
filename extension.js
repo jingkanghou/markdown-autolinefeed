@@ -10,18 +10,6 @@ function activate(context) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "markdown-autolinefeed" is now active!');
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', function () {
-        // The code you place here will be executed every time your command is executed
-
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
-    });
-
-    context.subscriptions.push(disposable);
-
     let autoLineFeed = vscode.commands.registerCommand('extension.AutoLineFeed', function () {
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -41,6 +29,53 @@ function activate(context) {
     });
 
     context.subscriptions.push(autoLineFeed);
+
+
+    let autoSpace = vscode.commands.registerCommand('extension.AutoSpace', function () {
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return; // No open text editor
+        }
+
+        let lineCount = editor.document.lineCount;
+        editor.edit((editBuilder) => {
+
+            let ignoring = false;
+            for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
+                let lineText = editor.document.lineAt(lineIndex).text;
+                
+                if (/^(\s{0,3}```)/g.test(lineText)) {
+                    ignoring = !ignoring;
+                    continue;
+                }
+                if(ignoring) continue;
+
+
+                let newLineText = '';
+                newLineText = lineText.replace(/(( ){2,})\S/g, function(){
+                    let match = arguments[0];
+                    let firstGroupData = arguments[1];
+                    let newGroupData = ' ';
+
+                    for (let index = 1; index < firstGroupData.length; index++) {
+                        newGroupData += '&nbsp;';                        
+                    }
+
+                    match = match.replace(firstGroupData,newGroupData);
+
+                    return match;
+                });
+
+                editBuilder.replace(new vscode.Range(new vscode.Position(lineIndex, 0),
+                                                     new vscode.Position(lineIndex, lineText.length)
+                                                    ), 
+                                    newLineText);
+            }
+
+        });
+    });
+
+    context.subscriptions.push(autoSpace);
 }
 exports.activate = activate;
 
