@@ -10,26 +10,38 @@ function activate(context) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "markdown-autolinefeed" is now active!');
 
+    function PadLineFeed(editor, startLineIndex, endLineIndex, editBuilder ){
+        for (let lineIndex = startLineIndex; lineIndex <= endLineIndex; lineIndex++) {
+            let lineText = editor.document.lineAt(lineIndex).text;
+            if (/(\S|(\S ))$/g.test(lineText)) {
+                editBuilder.insert(new vscode.Position(lineIndex, lineText.length), (RegExp.$1.length == 1?'  ':' '));
+            }
+        }
+    }
+
     let autoLineFeed = vscode.commands.registerCommand('extension.AutoLineFeed', function () {
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
         }
 
-        let lineCount = editor.document.lineCount;
         editor.edit((editBuilder) => {
-            for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
-                let lineText = editor.document.lineAt(lineIndex).text;
-                if (/(\S|(\S ))$/g.test(lineText)) {
-                    editBuilder.insert(new vscode.Position(lineIndex, lineText.length), (RegExp.$1.length == 1?'  ':' '));
-                }
+            if(editor.selection.isEmpty){
+                PadLineFeed(editor, 0, editor.document.lineCount - 1, editBuilder);    
+            } else {
+                PadLineFeed(editor, editor.selection.start.line, editor.selection.end.line, editBuilder);
             }
-
         });
+
+
     });
 
     context.subscriptions.push(autoLineFeed);
 
+
+    function PadSpace(editor, startLineIndex, endLineIndex, editBuilder){
+        // todo:
+    }
 
     let autoSpace = vscode.commands.registerCommand('extension.AutoSpace', function () {
         let editor = vscode.window.activeTextEditor;
